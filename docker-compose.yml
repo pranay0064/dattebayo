@@ -1,0 +1,14 @@
+version: '2.1'
+services:
+    db:
+        image: mysql:latest
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: dattebayo
+        ports:
+            - "3306:3306"
+        healthcheck:
+            test: mysql -D security -ppassword -e "SELECT 1"
+            interval: 4s
+            timeout: 1s
+            retries: 5
