@@ -5,9 +5,11 @@ import com.dattebayo.dattebayo.api.UsersRegisterRequest;
 import com.dattebayo.dattebayo.model.Users;
 import com.dattebayo.dattebayo.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -40,6 +42,10 @@ public class UsersService {
             ex.printStackTrace();
         }
         return "Failed to register User";
+    }
+
+    public boolean isMyPage(Principal principal, String username){
+        return principal.getName().equals(username);
     }
 
     public UsersProfileResponse getUserProfileDetails(String userName){

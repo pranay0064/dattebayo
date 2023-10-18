@@ -4,7 +4,11 @@ import com.dattebayo.dattebayo.api.UsersProfileResponse;
 import com.dattebayo.dattebayo.api.UsersRegisterRequest;
 import com.dattebayo.dattebayo.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -18,11 +22,13 @@ public class UsersController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody UsersRegisterRequest request) {
-        return usersService.registerUser(request);
+    @PreFilter("filterObject.username != 'test'")
+    public String registerUser(@RequestBody List<UsersRegisterRequest> request) {
+        return usersService.registerUser(request.get(0));
     }
 
     @GetMapping("/{username}/info")
+    @PreAuthorize("@usersService.isMyPage(authentication, #username)")
     public UsersProfileResponse getUser(@PathVariable(name = "username") final String username){
         return usersService.getUserProfileDetails(username);
     }
