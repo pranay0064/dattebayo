@@ -5,6 +5,7 @@ import com.dattebayo.dattebayo.api.UsersRegisterRequest;
 import com.dattebayo.dattebayo.model.Users;
 import com.dattebayo.dattebayo.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
@@ -16,22 +17,29 @@ public class UsersService {
     @Autowired
     private UsersRepository usersRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public UsersService(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 
     public String registerUser(UsersRegisterRequest request) {
-        Users users=new Users();
-        users.setUsername(request.getUsername());
-        users.setPassword(request.getPassword());
-        users.setLeetcodeProfileUrl(request.getLeetcodeProfileName());
-        users.setVisibility(request.isVisibility());
-        try{
-            usersRepository.save(users);
-        }catch (Exception e){
-            e.printStackTrace();
+        Users newUser=new Users();
+        try {
+            String hashPwd = passwordEncoder.encode(request.getPassword());
+            newUser.setPassword(hashPwd);
+            newUser.setUsername(request.getUsername());
+            newUser.setLeetcodeProfileUrl(request.getLeetcodeProfileName());
+            newUser.setVisibility(request.isVisibility());
+            newUser = usersRepository.save(newUser);
+            if (newUser.getId()!=null) {
+                return "Given user details are successfully registered";
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        return "successful";
+        return "Failed to register User";
     }
 
     public UsersProfileResponse getUserProfileDetails(String userName){

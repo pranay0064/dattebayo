@@ -1,8 +1,4 @@
 spring:
-  security:
-    user:
-      name: pranay
-      password: pranay
   datasource:
     url: jdbc:mysql://localhost:3306/dattebayo
     username: ${DB_USER:root}
