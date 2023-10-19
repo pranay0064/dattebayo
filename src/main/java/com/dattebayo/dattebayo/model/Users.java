@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 
@@ -34,4 +35,10 @@ public class Users {
 
     @Column(name = "visibility")
     private boolean visibility;
+
+    @Column(name = "created_at")
+    private Timestamp createdAt;
+
+    @Column(name = "updated_at")
+    private Timestamp updatedAt;
 }

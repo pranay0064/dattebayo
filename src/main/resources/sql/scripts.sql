@@ -13,3 +13,7 @@ CREATE TABLE users
 );
 
 alter table users add column email varchar(96) unique;
+
+alter table users add column created_at DATETIME;
+
+alter table users add column updated_at DATETIME;

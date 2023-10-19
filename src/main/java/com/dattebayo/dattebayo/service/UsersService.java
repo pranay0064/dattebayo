@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.sql.Timestamp;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -35,6 +36,8 @@ public class UsersService {
             newUser.setEmail(request.getEmail());
             newUser.setLeetcodeProfileUrl(request.getLeetcodeProfileName());
             newUser.setVisibility(request.isVisibility());
+            newUser.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+            newUser.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
             newUser = usersRepository.save(newUser);
             if (newUser.getId()!=null) {
                 return "Given user details are successfully registered";
