@@ -11,3 +11,5 @@ CREATE TABLE users
     visibility                   tinyint(1)        DEFAULT '0',
     PRIMARY KEY (id)
 );
+
+alter table users add column email varchar(96) unique;

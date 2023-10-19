@@ -5,13 +5,11 @@ import com.dattebayo.dattebayo.api.UsersRegisterRequest;
 import com.dattebayo.dattebayo.model.Users;
 import com.dattebayo.dattebayo.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -34,6 +32,7 @@ public class UsersService {
             String hashPwd = passwordEncoder.encode(request.getPassword());
             newUser.setPassword(hashPwd);
             newUser.setUsername(request.getUsername());
+            newUser.setEmail(request.getEmail());
             newUser.setLeetcodeProfileUrl(request.getLeetcodeProfileName());
             newUser.setVisibility(request.isVisibility());
             newUser = usersRepository.save(newUser);
@@ -47,7 +46,11 @@ public class UsersService {
     }
 
     public boolean isMyPage(Principal principal, String username){
-        return principal.getName().equals(username);
+        Optional<Users> user = usersRepository.findByEmail(principal.getName());
+        if(user.isPresent()){
+            return user.get().getUsername().equals(username);
+        }
+        return false;
     }
 
     public UsersProfileResponse getUserProfileDetails(String userName){
@@ -60,7 +63,7 @@ public class UsersService {
     }
 
     public Users getUserDetailsAfterLogin(Authentication authentication) {
-        Optional<Users> user = usersRepository.findByUsername(authentication.getName());
+        Optional<Users> user = usersRepository.findByEmail(authentication.getName());
         if (user.isPresent()) {
             return user.get();
         } else {
@@ -71,6 +74,7 @@ public class UsersService {
     private UsersProfileResponse getUserProfileResponseFromUsers(Users user){
         UsersProfileResponse response=new UsersProfileResponse();
         response.setUsername(user.getUsername());
+        response.setEmail(user.getEmail());
         response.setVisibility(user.isVisibility());
         response.setLeetcodeProfileName(user.getLeetcodeProfileUrl());
         return response;

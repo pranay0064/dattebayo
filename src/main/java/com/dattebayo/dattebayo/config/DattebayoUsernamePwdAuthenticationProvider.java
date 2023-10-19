@@ -26,12 +26,12 @@ public class DattebayoUsernamePwdAuthenticationProvider implements Authenticatio
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String username = authentication.getName();
+        String email = authentication.getName();
         String pwd = authentication.getCredentials().toString();
-        Optional<Users> user=usersRepository.findByUsername(username);
+        Optional<Users> user=usersRepository.findByEmail(email);
         if(user.isPresent()){
             if (passwordEncoder.matches(pwd, user.get().getPassword())) {
-                return new UsernamePasswordAuthenticationToken(username, pwd,null);
+                return new UsernamePasswordAuthenticationToken(email, pwd,null);
             } else {
                 throw new BadCredentialsException("Invalid password!");
             }
