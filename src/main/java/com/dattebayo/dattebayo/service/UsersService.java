@@ -6,10 +6,12 @@ import com.dattebayo.dattebayo.model.Users;
 import com.dattebayo.dattebayo.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -54,6 +56,15 @@ public class UsersService {
             return getUserProfileResponseFromUsers(user.get());
         }else{
             throw new NoSuchElementException("Please enter valid username");
+        }
+    }
+
+    public Users getUserDetailsAfterLogin(Authentication authentication) {
+        Optional<Users> user = usersRepository.findByUsername(authentication.getName());
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            return null;
         }
     }
 
