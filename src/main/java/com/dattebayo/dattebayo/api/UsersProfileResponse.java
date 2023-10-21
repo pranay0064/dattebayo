@@ -11,4 +11,6 @@ public class UsersProfileResponse {
     private String leetcodeProfileName;
 
     private boolean visibility;
+
+    private LeetCodeStatsResponse leetcodeStats;
 }

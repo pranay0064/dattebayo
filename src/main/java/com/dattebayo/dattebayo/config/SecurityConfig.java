@@ -23,7 +23,7 @@ public class SecurityConfig {
                 .addFilterBefore(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/users/{username}/info","/users/login").authenticated()
-                        .requestMatchers( "/users/register").permitAll())
+                        .requestMatchers( "/users/register","/users/{username}/stats").permitAll())
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
         return http.build();

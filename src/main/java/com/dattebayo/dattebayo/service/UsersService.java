@@ -21,6 +21,9 @@ public class UsersService {
     private UsersRepository usersRepository;
 
     @Autowired
+    private LeetCodeStatsService leetCodeStatsService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public UsersService(UsersRepository usersRepository) {
@@ -80,6 +83,7 @@ public class UsersService {
         response.setEmail(user.getEmail());
         response.setVisibility(user.isVisibility());
         response.setLeetcodeProfileName(user.getLeetcodeProfileUrl());
+        response.setLeetcodeStats(leetCodeStatsService.getStats(user.getUsername()));
         return response;
     }
 }
