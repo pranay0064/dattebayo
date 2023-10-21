@@ -83,7 +83,7 @@ public class UsersService {
         response.setEmail(user.getEmail());
         response.setVisibility(user.isVisibility());
         response.setLeetcodeProfileName(user.getLeetcodeProfileUrl());
-        response.setLeetcodeStats(leetCodeStatsService.getStats(user.getUsername()));
+        response.setLeetcodeStats(leetCodeStatsService.getStats(user.getLeetcodeProfileUrl()));
         return response;
     }
 }
